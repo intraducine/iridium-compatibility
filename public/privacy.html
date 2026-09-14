@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Privacy information for the Iridium compatibility board.">
+  <title>Privacy · Iridium Compatibility</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="/">
+      <span>Iridium</span>
+      <span class="brand-context">Compatibility</span>
+    </a>
+  </header>
+
+  <main class="page-shell privacy-page">
+    <h1>Privacy</h1>
+    <div class="privacy-card">
+      <h2>Anonymous browser identity</h2>
+      <p>Your browser creates a random identifier in local storage. The server converts it to a keyed one-way hash before storing votes or compatibility ratings. The raw browser identifier is not stored in the database.</p>
+
+      <h2>Compatibility reports</h2>
+      <p>Compatibility ratings are scoped to the Iridium version they were submitted for. The current version is detected automatically, so older reports never affect the current compatibility score. A report can include optional notes. Ratings, versions, notes, and report dates may be shown publicly, but the identity behind a report is never shown.</p>
+
+      <h2>What is not stored with public activity</h2>
+      <p>The application does not store your name, email address, Steam account, GitHub account, or raw IP address with votes or compatibility ratings. Cloudflare may process network information to deliver and protect the service, but the application database does not save raw IP addresses.</p>
+
+      <h2>Abuse protection</h2>
+      <p>Cloudflare Turnstile and rate limiting protect searches, requests, votes, and ratings from automated abuse. Short-lived quota counters use anonymous keyed hashes.</p>
+
+      <h2>Administration</h2>
+      <p>GitHub authentication is used only for authorized administrators. The application verifies the allowed GitHub account and then issues a short-lived secure admin session. The admin session does not contain the GitHub username.</p>
+    </div>
+    <a class="privacy-back" href="/">Back to compatibility</a>
+  </main>
+</body>
+</html>

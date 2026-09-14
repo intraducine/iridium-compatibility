@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Vote for Steam games you want Iridium to support and rate games you have tested.">
+  <title>Iridium Compatibility</title>
+  <link rel="stylesheet" href="/styles.css">
+  <script src="/app.js" defer></script>
+  <script src="https://challenges.cloudflare.com/turnstile/v0/api.js?onload=onTurnstileLoad&amp;render=explicit" defer></script>
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="/" aria-label="Iridium compatibility home">
+      <span>Iridium</span>
+      <span class="brand-context">Compatibility</span>
+    </a>
+    <div class="header-actions">
+      <button id="adminButton" class="button button-ghost" type="button">Admin</button>
+      <button id="requestButton" class="button button-primary" type="button">Request game</button>
+    </div>
+  </header>
+
+  <main class="page-shell">
+    <section class="hero" aria-labelledby="pageTitle">
+      <h1 id="pageTitle">Game compatibility</h1>
+      <p class="hero-copy">Vote for what you want supported. Rate games you've tested.</p>
+    </section>
+
+    <section class="toolbar" aria-label="Game filters">
+      <label class="search-box" for="gameSearch">
+        <span class="sr-only">Search requested games</span>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m21 21-4.35-4.35m2.35-5.65a8 8 0 1 1-16 0 8 8 0 0 1 16 0Z"/></svg>
+        <input id="gameSearch" type="search" maxlength="80" autocomplete="off" placeholder="Search games">
+      </label>
+      <div class="sort-group" role="group" aria-label="Sort games">
+        <button class="sort-button is-active" type="button" data-sort="popular">Popular</button>
+        <button class="sort-button" type="button" data-sort="new">Recent</button>
+      </div>
+    </section>
+
+    <section aria-live="polite" aria-busy="false" id="gamesSection">
+      <div id="gamesGrid" class="games-grid"></div>
+      <div id="emptyState" class="empty-state" hidden>
+        <h2>No games found</h2>
+        <p>Try another search or request a game.</p>
+      </div>
+      <div class="load-more-wrap">
+        <button id="loadMoreButton" class="button button-secondary" type="button" hidden>Load more</button>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <span>Iridium</span>
+    <a href="/privacy.html">Privacy</a>
+  </footer>
+
+  <dialog id="requestDialog" class="modal">
+    <form method="dialog" class="modal-card" id="requestForm">
+      <div class="modal-heading">
+        <h2>Request a game</h2>
+        <button class="icon-button" type="button" id="closeRequestButton" aria-label="Close">×</button>
+      </div>
+      <label class="search-box modal-search" for="steamSearch">
+        <span class="sr-only">Search Steam</span>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m21 21-4.35-4.35m2.35-5.65a8 8 0 1 1-16 0 8 8 0 0 1 16 0Z"/></svg>
+        <input id="steamSearch" type="search" minlength="2" maxlength="60" autocomplete="off" placeholder="Search Steam">
+      </label>
+      <div id="steamSearchStatus" class="search-status" aria-live="polite"></div>
+      <div id="steamResults" class="steam-results"></div>
+    </form>
+  </dialog>
+
+  <dialog id="reportsDialog" class="modal reports-modal">
+    <div class="modal-card">
+      <div class="modal-heading">
+        <div>
+          <h2 id="reportsTitle">Compatibility</h2>
+          <p id="reportsSubtitle" class="modal-subtitle"></p>
+        </div>
+        <button class="icon-button" type="button" id="closeReportsButton" aria-label="Close">×</button>
+      </div>
+
+      <div class="reports-overview">
+        <div class="reports-score-line">
+          <span id="reportsScore" class="reports-score">Untested</span>
+          <span id="reportsScoreMeta" class="reports-score-meta"></span>
+        </div>
+        <div id="reportsDistribution" class="rating-distribution" hidden></div>
+        <div id="reportsVersionWrap" class="reports-version-wrap" hidden>
+          <label for="reportsVersionSelect">Iridium version</label>
+          <select id="reportsVersionSelect" class="reports-version-select"></select>
+        </div>
+      </div>
+
+      <div class="reports-toolbar">
+        <button id="rateGameButton" class="button button-secondary" type="button">Rate this game</button>
+      </div>
+
+      <section class="reports-section" aria-live="polite">
+        <div class="reports-section-heading">
+          <h3>Recent reports</h3>
+          <span id="reportsStatus"></span>
+        </div>
+        <div id="reportsList" class="reports-list"></div>
+        <p id="reportsEmpty" class="reports-empty" hidden>No compatibility reports yet.</p>
+        <button id="loadMoreReportsButton" class="button button-secondary reports-load-more" type="button" hidden>Load more</button>
+      </section>
+    </div>
+  </dialog>
+
+  <dialog id="ratingDialog" class="modal rating-modal">
+    <form class="modal-card" id="ratingForm">
+      <div class="modal-heading">
+        <div>
+          <h2 id="ratingTitle">Rate compatibility</h2>
+          <p class="modal-subtitle">Use the result you actually saw in Iridium.</p>
+        </div>
+        <button class="icon-button" type="button" id="closeRatingButton" aria-label="Close">×</button>
+      </div>
+
+      <fieldset class="rating-fieldset">
+        <legend>Compatibility</legend>
+        <div id="ratingOptions" class="rating-options"></div>
+      </fieldset>
+
+      <p id="ratingVersionNotice" class="rating-version-notice"></p>
+
+      <label class="field-label" for="ratingNotes">Notes <span>optional</span></label>
+      <textarea id="ratingNotes" class="text-area" maxlength="600" rows="4" placeholder="Briefly describe issues that affect playability"></textarea>
+
+      <div class="modal-actions">
+        <button id="removeRatingButton" class="button button-danger" type="button" hidden>Remove rating</button>
+        <button id="saveRatingButton" class="button button-primary" type="submit">Submit rating</button>
+      </div>
+    </form>
+  </dialog>
+
+  <div id="turnstile-container" class="turnstile-slot" aria-live="polite"></div>
+  <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
+</body>
+</html>

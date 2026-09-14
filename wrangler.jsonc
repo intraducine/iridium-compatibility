@@ -1,0 +1,50 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "iridium-compatibility",
+  "main": "src/worker.js",
+  "compatibility_date": "2026-09-13",
+  "workers_dev": true,
+  "assets": {
+    "directory": "./public",
+    "binding": "ASSETS",
+    "run_worker_first": true
+  },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "iridium-compatibility",
+      "database_id": "REPLACE_WITH_D1_DATABASE_ID",
+      "migrations_dir": "migrations"
+    }
+  ],
+  "ratelimits": [
+    {
+      "name": "SEARCH_RATE_LIMITER",
+      "namespace_id": "98421001",
+      "simple": { "limit": 30, "period": 60 }
+    },
+    {
+      "name": "VOTE_RATE_LIMITER",
+      "namespace_id": "98421002",
+      "simple": { "limit": 30, "period": 60 }
+    },
+    {
+      "name": "REQUEST_RATE_LIMITER",
+      "namespace_id": "98421003",
+      "simple": { "limit": 5, "period": 60 }
+    },
+    {
+      "name": "ADMIN_RATE_LIMITER",
+      "namespace_id": "98421004",
+      "simple": { "limit": 60, "period": 60 }
+    },
+    {
+      "name": "SEARCH_IP_RATE_LIMITER",
+      "namespace_id": "98421005",
+      "simple": { "limit": 120, "period": 60 }
+    }
+  ],
+  "observability": {
+    "enabled": true
+  }
+}

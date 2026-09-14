@@ -1,0 +1,9 @@
+# Copy this file to .dev.vars for local development only.
+# Never commit .dev.vars or real values.
+TURNSTILE_SITE_KEY=your_turnstile_site_key
+TURNSTILE_SECRET=your_turnstile_secret
+RATE_LIMIT_SECRET=generate_a_long_random_value
+SESSION_SECRET=generate_a_different_long_random_value
+GITHUB_CLIENT_ID=your_github_oauth_client_id
+GITHUB_CLIENT_SECRET=your_github_oauth_client_secret
+ADMIN_GITHUB_LOGINS=github-login-allowed-to-admin
